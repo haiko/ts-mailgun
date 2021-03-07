@@ -1,6 +1,6 @@
 {
 	"name": "ts-mailgun",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "Mailgun wrapper for sending emails from NodeJS",
 	"main": "dist/ts-mailgun.js",
 	"types": "dist/ts-mailgun.d.ts",
@@ -28,7 +28,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/haiko/ts-mailgun.git"
+		"url": "git+https://github.com/StatelessStudio/ts-mailgun.git"
 	},
 	"author": "Cyberworkz",
 	"license": "MIT",
