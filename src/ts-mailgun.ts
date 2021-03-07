@@ -8,13 +8,13 @@ import { MailgunTemplate } from './mailgun-template';
  * 	You must create a new NodeMailgun() instance, set the necessary members (below),
  * 	and then call init(). After initialization, you can then call send() to send an
  * 	email.
- * 
+ *
  * 	Necessary Members:
  * 		- apiKey Mailgun API Key
  * 		- domain Mailgun registered domain
  * 		- fromEmail Email address to send from (Does not have to exist)
  * 		- fromTitle Email address sender name
- * 
+ *
  * @param apiKey string (Optional) Mailgun API Key
  * @param domain string (Optional) Mailgun registered domain
  */
@@ -118,6 +118,7 @@ export class NodeMailgun {
 	 * @param name Keyname of the template
 	 */
 	getTemplate(name: string): boolean | MailgunTemplate {
+
 		if (name in this.templates) {
 			return this.templates[name];
 		}
@@ -147,6 +148,50 @@ export class NodeMailgun {
 		this.list = this.mailgun.lists(list);
 
 		return this;
+	}
+
+
+	/**
+	 * Send a message with a template defined at MailGun
+	 * @param to string | string[] Email Address to send message to
+	 * @param subject string Message subject
+	 * @param templateName string template Name
+	 * @param templateVars Object Template variables to send
+	 * @param sendOptions Object Additional message options to send
+	 */
+	public sendWithTemplate(to: string | string[],
+							subject: string,
+							templateName: string,
+							templateVars = {},
+							sendOptions = {}) : Promise<any> {
+		return new Promise((accept, reject) => {
+			// Check mailgun
+			if (!this.mailgun) {
+				reject(
+					'Please call NodeMailgun::init() before sending a message!'
+				);
+
+				return;
+			}
+
+
+			// Create message parts
+			let message = {
+				from: `${this.fromTitle} <${this.fromEmail}>`,
+				to: to,
+				subject: subject,
+				template: templateName,
+				'h:X-Mailgun-Variables': JSON.stringify(templateVars)
+			};
+
+			message = Object.assign(message, sendOptions);
+
+			// Send email
+			this.mailgun.messages().send(message, (error, result) => {
+				// Pass result through Promise
+				error ? reject(error) : accept(result);
+			});
+		});
 	}
 
 	/**
