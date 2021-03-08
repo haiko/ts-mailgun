@@ -1,5 +1,5 @@
 {
-	"name": "@haiko/ts-mailgun",
+	"name": "haiko/ts-mailgun",
 	"version": "0.2.0",
 	"description": "Mailgun wrapper for sending emails from NodeJS",
 	"main": "dist/ts-mailgun.js",
